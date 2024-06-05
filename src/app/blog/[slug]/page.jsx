@@ -1,6 +1,8 @@
 const SinglePostPage=()=>{
     return (
-        <div>SinglePostPage</div>
+        <div className={styles.container}>
+        SinglePostPage
+        </div>
     );
 }
 export default SinglePostPage;
