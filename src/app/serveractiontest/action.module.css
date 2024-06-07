@@ -1,0 +1,33 @@
+.container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+.form{
+   display: flex; 
+   flex-direction: column;
+   gap: 20px;
+   justify-content: space-between;
+}
+
+.form input,
+.form textarea{
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background-color: var(--bgSoft);
+    color: var(--text);
+}
+
+.send{
+    background-color: var(--btn);
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+}
