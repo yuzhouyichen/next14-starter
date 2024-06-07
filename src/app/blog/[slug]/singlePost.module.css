@@ -31,6 +31,10 @@
     border-radius: 50%;
 }
 
+.content{
+    font-size: 20px;
+}
+
 .detailText{
     display: flex;
     flex-direction: column;
@@ -45,10 +49,6 @@
 .detailValue{
     color: gray;
     font-weight: 500;
-}
-
-.content{
-    font-size: 20px;
 }
 
 @media (max-width:768px) {

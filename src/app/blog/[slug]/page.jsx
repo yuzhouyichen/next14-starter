@@ -1,42 +1,69 @@
 import Image from "next/image";
 import styles from "./singlePost.module.css"
+import PostUser from "@/components/postUser/PostUser";
+import { Suspense } from "react";
+import { getPost } from "@/lib/data";
+
+export const generateMetadata=async({params})=>{
+
+    const {slug} = params;
+    // const post = await getPostFromApi(slug);
+    const post = await getPost(slug);
+    return {
+        title:post.title,
+        description:post.desc
+    };
+}
+
+const getPostFromApi= async(slug)=>{
+    try {
+        const res= await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`,{cache:"no-store"});
+
+        if(!res.ok){
+           throw new Error("fetch single post failed!");
+        }
+
+        return res.json();
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 // {params} 
-const SinglePostPage=({params})=>{
-    console.log(params);
+const SinglePostPage=async({params})=>{
+    const {slug} = params;
+    // const post = await getPostFromApi(slug);
+
+    const post = await getPost(slug);
+    console.log(post);
+    console.log(JSON.stringify(post));
+
+
     return (
         <div className={styles.container}>
             <div className={styles.imageContainer}>
-                <Image src="https://images.pexels.com/photos/9681179/pexels-photo-9681179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                {post.img&&<Image src={post.img} 
                 alt="post content" 
                 fill 
-                className={styles.img} />
+                className={styles.img} />}
             </div>
             <div className={styles.textContainer}>
-                <h1>Title</h1>
+                <h1>{post.title}</h1>
                 <div className={styles.detail}>
-                    <Image 
-                    src="https://images.pexels.com/photos/9681179/pexels-photo-9681179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                    alt="post content" 
-                    width={50}
-                    height={50}
-                    className={styles.ava} 
-                    />
                     
+                    {/* 如果没找到用户则会显示加载状态 */}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <PostUser userId={post.userId} />
+                    </Suspense>
                     <div className={styles.detailText}>
-                        <span className={styles.detailTitle}>Author</span>
-                        <span className={styles.detailValue}>01.02.2024</span>
+                        <span className={styles.detailTitle}>Published</span>
+                        <span className={styles.detailValue}>{post.createdAt.toString().slice(4,16)}</span>
                     </div>
                     
-                    <div className={styles.detailText}>
-                        <span className={styles.detailTitle}>Author</span>
-                        <span className={styles.detailValue}>01.02.2024</span>
-                    </div>
                 </div>
-
                 <div className={styles.content}>
-                    A tiny VS Code extension made up of a few commands that generate and insert lorem ipsum text into a text file.
-                    To use the extension, open the command palette (F1 or cmd/ctrl+shift+p, type "lorem ipsum" and select to insert either a line or paragraph.
+                    {post.body}
                 </div>
 
             </div>
