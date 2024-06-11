@@ -30,12 +30,28 @@ const getPostFromApi= async(slug)=>{
     }
 }
 
+const getPostFromLocalApi= async(slug)=>{
+    try {
+        const res= await fetch(`http://localhost:3000/api/blog/${slug}`,{cache:"no-store"});
+
+        if(!res.ok){
+           throw new Error("fetch single post failed!");
+        }
+
+        return res.json();
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 // {params} 
 const SinglePostPage=async({params})=>{
     const {slug} = params;
     // const post = await getPostFromApi(slug);
+    const post = await getPostFromLocalApi(slug);
 
-    const post = await getPost(slug);
+    // const post = await getPost(slug);
     console.log(post);
     console.log(JSON.stringify(post));
 

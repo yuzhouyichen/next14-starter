@@ -1,8 +1,10 @@
 "use server"
 
 import { revalidatePath } from "next/cache";
-import { Post } from "./models";
+import { Post, User } from "./models";
 import { connectToDb } from "./utils";
+import { signIn, signOut } from "./auth";
+import bcrypt from "bcrypt"
 
 export const addPost = async(formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
@@ -43,4 +45,65 @@ export const deletePost = async(formData)=>{
         return {error:"delete post failed!"}
     }
    
+}
+
+export const handleGithubLogin=async()=>{
+    "use server";
+    await signIn("github");
+}
+
+export const handleLogout=async()=>{
+    "use server";
+    console.log("handleLogout");
+    await signOut();
+}
+
+export const register=async(previousState,formData)=>{
+    "use server";
+    const {username,email,password,rePassword}=Object.fromEntries(formData);
+    console.log(username,email,password,rePassword);
+    if(password!==rePassword){
+        console.log("Password doesn't match!");
+        return {error:"Password doesn't match!"};
+    }
+    try {
+       connectToDb();
+       const user=await User.findOne({email});
+       if(user){
+        console.log("User already exists!");
+        return {error:"User already exists!"};
+       }
+
+       //加密密码
+       const salt=bcrypt.genSaltSync(10);
+       const hashedPassword= bcrypt.hashSync(password,salt); 
+       console.log(hashedPassword);
+
+       const newUser= new User({
+        username,
+        email,
+        password:hashedPassword
+       });
+       await newUser.save();
+       console.log("User saved to db!");
+       return {success:true};
+    } catch (error) {
+        console.log(error);
+        return {error:"Failed to register!"}
+    }
+}
+
+export const login=async(previousState,formData)=>{
+    "use server";
+    const {username,password}=Object.fromEntries(formData);
+    console.log(username,password);
+    try {
+        await signIn("credentials", { username, password });
+    } catch (err) {
+        console.log(err.message);
+        if (err.message.includes("CredentialsSignin")) {
+            return {error:"invalid username or password!"};
+        }
+        throw err;
+    }
 }

@@ -4,8 +4,9 @@ import Image from "next/image";
 import styles from "./links.module.css"
 import NavLink from "./navLinks/NavLink";
 import { useState } from "react";
+import { handleLogout } from "@/lib/action";
 
-const Links=()=>{
+const Links= ({session})=>{
     const [open,setOpen]=useState(true);
     const links=[
         {
@@ -25,8 +26,6 @@ const Links=()=>{
             path:"/blog"
         }
     ];
-    // show Admin and login or logout;
-    const session=true;
     const isAdmin=true;
     return (
         <div className={styles.container}>
@@ -34,10 +33,12 @@ const Links=()=>{
                 {links.map(
                     linkItem => <NavLink item={linkItem} key={linkItem.title} />
                 )}
-                {session?(
+                {session?.user?(
                     <>
-                        {isAdmin&& <NavLink item={{title:"Admin",path:"/admin"}} />}
-                        <button className={styles.logout}>Logout</button> 
+                        {session.user?.isAdmin&& <NavLink item={{title:"Admin",path:"/admin"}} />}
+                        <form action={handleLogout}>
+                            <button className={styles.logout}>Logout</button> 
+                        </form>
                     </>
                 ):(
                     <NavLink item={{title:"Login",path:"/login"}} />
@@ -50,10 +51,12 @@ const Links=()=>{
             {open&&(
                 <div className={styles.mobileLinks}> 
                     {links.map(link=><NavLink item={link} key={link.title} />)}
-                    {session?(
+                    {session?.user ?(
                     <>
-                        {isAdmin&& <NavLink item={{title:"Admin",path:"/admin"}} />}
-                        <button className={styles.logout}>Logout</button> 
+                        {session.user?.isAdmin&& <NavLink item={{title:"Admin",path:"/admin"}} />}
+                        <form action={handleLogout}>
+                            <button className={styles.logout}>Logout</button>
+                        </form>
                     </>
                 ):(
                     <NavLink item={{title:"Login",path:"/login"}} />

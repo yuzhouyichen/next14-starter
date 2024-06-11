@@ -15,11 +15,24 @@ const getDataFromApi= async ()=>{
     }
 }
 
+const getDataFromLocalApi= async ()=>{
+    try {
+        const res = await fetch("http://localhost:3000/api/blog",{cache:"no-store"});
+        if(!res.ok){
+            throw new Error("fetch posts went wrong");
+        }
+        return res.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 const BlogPage= async()=>{
 
     //const posts= await getDataFromApi();
-    const posts= await getPosts();
+    const posts= await getDataFromLocalApi();
+    //const posts= await getPosts();
     console.log(JSON.stringify(posts))
 
     return (
