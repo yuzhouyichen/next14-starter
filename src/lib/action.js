@@ -8,7 +8,7 @@ import bcrypt from "bcrypt"
 
 export const addPost = async(formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
-    const {title,desc,slug,userId}=Object.fromEntries(formData);
+    const {title,desc,slug,img,userId}=Object.fromEntries(formData);
 
     //存入数据库
     try {
@@ -17,6 +17,7 @@ export const addPost = async(formData)=>{
             title,
             desc,
             slug,
+            img,
             userId
         }
         );
@@ -34,6 +35,7 @@ export const addPost = async(formData)=>{
 export const deletePost = async(formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
     const {postId}=Object.fromEntries(formData);
+    console.log(postId);
 
     //存入数据库
     try {
