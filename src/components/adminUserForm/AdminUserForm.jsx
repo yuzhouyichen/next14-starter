@@ -15,7 +15,11 @@ function AdminUserForm({userId}) {
           <input type="password" placeholder="password" name='password' />
           <input type="email" placeholder="email" name='email' />
           <input type="text" placeholder="image" name='img' />
-          <input type="text" placeholder="isAdmin" name='isAdmin' />
+          <select name='isAdmin'>
+            <option value="false">Is Admin?</option>
+            <option value="false">User</option>
+            <option value="true">Admin</option>
+          </select>
           {state&&state.error}
           <button className={styles.send}>Add User</button>
       </form>
