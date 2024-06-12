@@ -4,9 +4,15 @@ import AdminPost from '@/components/adminPost/AdminPost';
 import AdminPostForm from '@/components/adminPostForm/AdminPostForm';
 import AdminUser from '@/components/adminUser/AdminUser';
 import AdminUserForm from '@/components/adminUserForm/AdminUserForm';
+import { auth } from '@/lib/auth';
 
 
-function AdminPage() {
+async function AdminPage() {
+
+  const session= await auth();
+
+  console.log(session);
+
   return (
     <div className={styles.container}>
         <div className={styles.row}>
@@ -16,7 +22,7 @@ function AdminPage() {
                 </Suspense>
             </div>
             <div className={styles.col}>
-                <AdminPostForm/>
+                <AdminPostForm userId={session.user.id}/>
             </div>
         </div>
 
@@ -27,7 +33,7 @@ function AdminPage() {
                 </Suspense>
             </div>
             <div className={styles.col}>
-                <AdminUserForm/>
+                <AdminUserForm userId={session.user.id}/>
             </div>
         </div>
     </div>

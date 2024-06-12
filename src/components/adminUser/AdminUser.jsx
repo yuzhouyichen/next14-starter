@@ -12,7 +12,7 @@ async function AdminUser() {
         {users.map(user=>(
             <div className={styles.user} key={user.id}>
                 <div className={styles.detail}>
-                    <Image src={"/noavatar.png"} width={50} height={50}/>
+                    <Image src={user.img||"/noavatar.png"} width={50} height={50}/>
                     <span>{user.username}</span>
                 </div>
                 <form action={deleteUser}>

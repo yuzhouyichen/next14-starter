@@ -6,7 +6,7 @@ import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcrypt"
 
-export const addPost = async(formData)=>{
+export const addPost = async(state,formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
     const {title,desc,slug,img,userId}=Object.fromEntries(formData);
 
@@ -50,9 +50,9 @@ export const deletePost = async(formData)=>{
     }
 }
 
-export const addUser = async(previousState,formData)=>{
+export const addUser = async(state,formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
-    const {username,email,img,password}=Object.fromEntries(formData);
+    const {username,email,img,password,isAdmin}=Object.fromEntries(formData);
 
     //存入数据库
     try {
@@ -61,6 +61,7 @@ export const addUser = async(previousState,formData)=>{
             username,
             email,
             img,
+            isAdmin,
             password
         }
         );
@@ -74,7 +75,7 @@ export const addUser = async(previousState,formData)=>{
    
 }
 
-export const deleteUser = async(previousState,formData)=>{
+export const deleteUser = async(formData)=>{
     //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
     const {id}=Object.fromEntries(formData);
 
