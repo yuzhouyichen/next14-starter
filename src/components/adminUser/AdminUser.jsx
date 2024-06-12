@@ -21,7 +21,6 @@ async function AdminUser() {
                 </form>
             </div>
         ))}
-      
     </div>
   )
 }
