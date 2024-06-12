@@ -1,6 +1,13 @@
-const AdminPage=()=>{
-    return (
-        <div>AdminPage</div>
-    );
+import React from 'react';
+import styles from "./admin.module.css";
+
+
+function AdminPage() {
+  return (
+    <div>
+      
+    </div>
+  )
 }
-export default AdminPage;
+
+export default AdminPage

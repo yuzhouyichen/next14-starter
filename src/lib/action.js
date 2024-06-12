@@ -22,6 +22,7 @@ export const addPost = async(formData)=>{
         );
         await newPost.save();
         revalidatePath("/blog");
+        revalidatePath("/admin");
         console.log("save to db "+JSON.stringify(newPost));
     } catch (error) {
         console.log(error)
@@ -39,12 +40,53 @@ export const deletePost = async(formData)=>{
         connectToDb();
         await Post.findByIdAndDelete(postId)
         revalidatePath("/blog");
+        revalidatePath("/admin");
         console.log("delete from db ");
     } catch (error) {
         console.log(error)
         return {error:"delete post failed!"}
     }
+}
+
+export const addUser = async(previousState,formData)=>{
+    //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
+    const {username,email,img,password}=Object.fromEntries(formData);
+
+    //存入数据库
+    try {
+        connectToDb();
+        const newUser= new User({
+            username,
+            email,
+            img,
+            password
+        }
+        );
+        await newUser.save();
+        revalidatePath("/admin");
+        console.log("save to db "+JSON.stringify(newPost));
+    } catch (error) {
+        console.log(error)
+        return {error:"add user failed!"}
+    }
    
+}
+
+export const deleteUser = async(previousState,formData)=>{
+    //Object.fromEntries()接受一个可迭代的对象，例如数组，返回一个包含该对象键值对的新对象。在这种情况下，formData可能是一个数组或类数组对象，其中包含了键值对。
+    const {id}=Object.fromEntries(formData);
+
+    //存入数据库
+    try {
+        connectToDb();
+        await Post.deleteMany({userId:id});
+        await User.findByIdAndDelete(id);
+        revalidatePath("/admin");
+        console.log("delete user from db ");
+    } catch (error) {
+        console.log(error)
+        return {error:"delete user failed!"}
+    }
 }
 
 export const handleGithubLogin=async()=>{
